@@ -1,159 +1,147 @@
-```markdown
-# Modeling Car Insurance Claim Outcomes
+# Modeling Car Insurance Claim Outcomes  
+Auto Insurance Risk Modeling with Logistic Regression
 
-## Executive Summary
-This project builds an interpretable Logistic Regression model to predict the likelihood that an auto insurance policyholder will file a claim. Using underwriting-relevant features such as driving history, vehicle attributes, and exposure measures, the model achieves strong discriminatory power (ROC-AUC ≈ 0.89). Policyholders are segmented into risk tiers, with the highest-risk decile exhibiting a 92% observed claim rate versus 13% in the lowest tier. The results demonstrate clear applications for underwriting review, pricing adjustments, and loss ratio improvement.
+## Overview
+This project analyzes auto insurance policy data to predict whether a policyholder will file a claim during the policy period. The objective is to move beyond raw prediction accuracy and instead build an interpretable, underwriting-focused risk model that supports pricing decisions, loss control, and risk segmentation.
 
----
-
-## Business Problem
-Auto insurers must accurately assess claim risk at the policy level to price coverage appropriately, control loss exposure, and avoid adverse selection. Traditional rule-based underwriting can miss complex risk interactions, leading to underpriced high-risk policies or unnecessary friction for low-risk customers.
-
-**Objective:**  
-Predict whether a policyholder will file a claim during the policy period and translate model outputs into actionable underwriting risk tiers.
+The analysis follows a practical insurance analytics workflow:  
+Python → Logistic Regression → Risk Tier Segmentation → Business Interpretation
 
 ---
 
-## KPIs
+## Why This Project
+In auto insurance, a relatively small portion of policyholders generate a disproportionate share of losses. Accurately identifying higher-risk policies at quote or renewal time is critical for:
 
-### Model Performance
-- Confusion Matrix  
-- Precision  
-- Recall (Sensitivity)  
-- F1 Score  
-- ROC-AUC  
+- Pricing premiums appropriately  
+- Reducing unexpected loss exposure  
+- Avoiding adverse selection  
+- Maintaining competitiveness for low-risk drivers  
 
-### Insurance / Business KPIs
-- Claim Rate by Risk Tier  
-- Lift vs Random Selection  
-- False Negative Rate (missed high-risk exposure)  
-- False Positive Rate (customer friction risk)  
+This project prioritizes **interpretability and decision usability** rather than black-box prediction.
 
 ---
 
-## Data & Method
+## Data Source
+- Public auto insurance dataset (Kaggle)
+- ~10,000 individual policies
+- Binary claim outcome (`OUTCOME`)
+- Variables reflecting real underwriting inputs:
+  - Driver characteristics
+  - Driving history
+  - Vehicle attributes
+  - Exposure measures (e.g., annual mileage)
 
-### Dataset
-- Public auto insurance dataset sourced from Kaggle  
-- ~10,000 policies with a binary claim outcome (`OUTCOME`)  
-- Mix of driver behavior, vehicle characteristics, and exposure variables  
+---
 
-### Methodology
+## Modeling Approach
+A Logistic Regression model was selected to ensure transparency and explainability.
+
+Key steps:
 1. Data cleaning and preprocessing  
-2. One-hot encoding of categorical variables  
-3. Stratified train/test split to preserve claim rate  
+2. One-hot encoding of categorical underwriting variables  
+3. Stratified train/test split to preserve claim rates  
 4. Median imputation for missing numeric fields  
 5. Feature scaling for continuous variables  
-6. Logistic Regression modeling for interpretability  
-7. Threshold-independent evaluation using ROC-AUC  
-8. Risk tier segmentation based on predicted claim probability  
+6. Probability-based evaluation using ROC-AUC  
+7. Risk tier segmentation based on predicted claim probability  
+
+The model outputs **claim probabilities**, enabling flexible underwriting thresholds rather than rigid classifications.
 
 ---
 
-## Findings
+## Model Performance & Risk Separation
 
-### Model Performance
-- **ROC-AUC:** 0.888  
-- **Precision:** 74%  
-- **Recall:** 72%  
-- **Accuracy:** 83% (contextual only)  
+### ROC Curve (Ranking Power)
+![ROC Curve](reports/figures/roc_curve.png)
 
-The model effectively ranks policyholders by risk, capturing the majority of claimants while limiting excessive false positives.
+The model achieves strong discriminatory power (ROC-AUC ≈ 0.89), indicating effective ranking of policyholders by claim risk.
 
-### Risk Segmentation
+---
+
+### Confusion Matrix (Decision Trade-offs)
+![Confusion Matrix](reports/figures/confusion_matrix.png)
+
+False negatives represent unpriced loss exposure, while false positives represent potential customer friction. From an insurance perspective, the model prioritizes capturing high-risk policies without excessive over-flagging.
+
+---
+
+### Claim Rate by Risk Tier (Key Business Result)
+![Claim Rate by Risk Tier](reports/figures/claim_rate_by_risk_tier.png)
+
+Policyholders were segmented into three risk tiers based on predicted claim probability:
+
 | Risk Tier | Observed Claim Rate |
 |----------|--------------------|
-| Low Risk | 12.7% |
-| Medium Risk | 66.0% |
-| High Risk | 92.0% |
+| Low Risk | ~13% |
+| Medium Risk | ~66% |
+| High Risk | ~92% |
 
-High-risk policies are nearly **3× more likely** to file a claim than the portfolio average, demonstrating strong lift and underwriting value.
-
----
-
-## Recommendations
-
-### High Risk (Top 10%)
-- Underwriting review  
-- Higher deductibles or premium surcharges  
-- Coverage restrictions or additional documentation  
-
-### Medium Risk (Next 20%)
-- Moderate pricing adjustments  
-- Increased monitoring  
-
-### Low Risk (Bottom 70%)
-- Preferred pricing  
-- Retention-focused offers  
-- Straight-through processing  
-
-Applying these actions can materially improve loss ratio performance and pricing fairness.
+Relative to the overall portfolio claim rate (~31%), the highest-risk segment shows nearly **3× lift**, demonstrating strong underwriting value.
 
 ---
 
-## Next Steps
-- Incorporate claim severity modeling (loss amount)  
-- Optimize thresholds using expected loss cost  
-- Add geographic risk banding  
-- Deploy preprocessing and model as a production pipeline  
-- Build an interactive dashboard for underwriting teams  
+### Predicted Probability Distribution
+![Predicted Probability Distribution](reports/figures/predicted_probability_distribution.png)
+
+The distribution shows clear separation between low- and high-risk policies, supporting tier-based decisioning rather than a single cutoff.
 
 ---
 
-## Visualizations
+## Business Interpretation
+- **High Risk policies (top ~10%)**: underwriting review, pricing adjustments, or coverage restrictions  
+- **Medium Risk policies**: moderate pricing changes or increased monitoring  
+- **Low Risk policies**: preferred pricing and retention strategies  
 
-All figures are stored in:
+This tiered framework allows insurers to reduce loss exposure while maintaining competitiveness for low-risk customers.
 
-```
+---
 
-reports/figures/
+## Portfolio Context
+This project demonstrates:
+- Practical insurance risk modeling
+- Comfort with imbalanced classification problems
+- Emphasis on interpretability over black-box accuracy
+- Ability to translate model outputs into underwriting and pricing decisions
 
-```
-
-- `roc_curve.png` — ROC Curve showing ranking performance  
-- `confusion_matrix.png` — Classification trade-offs  
-- `claim_rate_by_risk_tier.png` — Business-critical risk segmentation  
-- `predicted_probability_distribution.png` — Probability spread and separation  
-
-### Example Figures
-![ROC Curve](reports/figures/roc_curve.png)
-![Claim Rate by Risk Tier](reports/figures/claim_rate_by_risk_tier.png)
+The focus is intentionally on **decision support**, not over-engineered modeling.
 
 ---
 
 ## Repository Structure
 
 ```
-
 Car_Insurance_Claim_Outcomes/
-├─ data/
-│  └─ raw/
-│     └─ car_insurance_claims.csv
-├─ notebooks/
-│  └─ 01_data_load_and_eda.ipynb
-├─ reports/
-│  └─ figures/
-│     ├─ roc_curve.png
-│     ├─ confusion_matrix.png
-│     ├─ claim_rate_by_risk_tier.png
-│     └─ predicted_probability_distribution.png
-├─ models/
-├─ src/
-└─ README.md
-
+│
+├── data/
+│   └── raw/
+│       └── car_insurance_claims.csv
+│
+├── notebooks/
+│   └── 01_data_load_and_eda.ipynb
+│
+├── reports/
+│   └── figures/
+│       ├── roc_curve.png
+│       ├── confusion_matrix.png
+│       ├── claim_rate_by_risk_tier.png
+│       └── predicted_probability_distribution.png
+│
+├── models/
+├── src/
+└── README.md
 ```
-
 ---
 
 ## Tools Used
-- Python (pandas, numpy)  
-- scikit-learn  
-- matplotlib & seaborn  
-- Jupyter Notebook  
+- Python (pandas, numpy)
+- scikit-learn
+- matplotlib & seaborn
+- Jupyter Notebook
 
 ---
 
 ## Author
 **Brian Buchanan**  
 Finance & Data Analytics | Insurance Risk Modeling
-```
+
+
