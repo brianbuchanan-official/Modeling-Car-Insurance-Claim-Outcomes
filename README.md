@@ -52,21 +52,21 @@ The model outputs **claim probabilities**, enabling flexible underwriting thresh
 ## Model Performance & Risk Separation
 
 ### ROC Curve (Ranking Power)
-![ROC Curve](reports/figures/roc_curve.png)
+![ROC Curve](Car_Insurance_Claim_Outcomes/reports/figures/roc_curve.png)
 
 The model achieves strong discriminatory power (ROC-AUC ≈ 0.89), indicating effective ranking of policyholders by claim risk.
 
 ---
 
 ### Confusion Matrix (Decision Trade-offs)
-![Confusion Matrix](reports/figures/confusion_matrix.png)
+![Confusion Matrix](Car_Insurance_Claim_Outcomes/reports/figures/confusion_matrix.png)
 
 False negatives represent unpriced loss exposure, while false positives represent potential customer friction. From an insurance perspective, the model prioritizes capturing high-risk policies without excessive over-flagging.
 
 ---
 
 ### Claim Rate by Risk Tier (Key Business Result)
-![Claim Rate by Risk Tier](reports/figures/claim_rate_by_risk_tier.png)
+![Claim Rate by Risk Tier](Car_Insurance_Claim_Outcomes/reports/figures/claim_rate_by_risk_tier.png)
 
 Policyholders were segmented into three risk tiers based on predicted claim probability:
 
@@ -81,7 +81,7 @@ Relative to the overall portfolio claim rate (~31%), the highest-risk segment sh
 ---
 
 ### Predicted Probability Distribution
-![Predicted Probability Distribution](reports/figures/predicted_probability_distribution.png)
+![Predicted Probability Distribution](Car_Insurance_Claim_Outcomes/reports/figures/predicted_probability_distribution.png)
 
 The distribution shows clear separation between low- and high-risk policies, supporting tier-based decisioning rather than a single cutoff.
 
